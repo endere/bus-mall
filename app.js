@@ -15,7 +15,7 @@ function Image(name, src){
   this.timesPressed = 0;
 }
 var holder = document.getElementById('imageHolder');
-
+var list = document.getElementById('listHolder');
 var imageArray = [
   new Image('Bag', 'img/bag.jpg'),
   new Image('Banana', 'img/banana.jpg'),
@@ -40,24 +40,78 @@ var imageArray = [
 ];
 var banned = [];
 var chosen = [];
+var clickLimit = 25;
+var n = 0;
+var dataShown = [];
+var dataPressed = [];
+var dataPercent = [];
+var dataLabels = [];
 function print(){
-  for (var i = 0; i < banned.length; i++) {
-    var axed = document.getElementById(banned[i].name);
-    axed.parentNode.removeChild(axed);
-  }
-  banned = chosen;
-  chosen = chooseThree();
-  var upNext = [];
-  console.log(chosen);
-  upNext.push(imageArray[chosen[0]]);
-  upNext.push(imageArray[chosen[1]]);
-  upNext.push(imageArray[chosen[2]]);
-  console.log(upNext);
-  banned = [];
-  for (var j = 0; j < upNext.length; j++){
-    createElement('img', 'src', upNext[j].src, '', imageHolder, 'id', upNext[j].name);
-    // upNext[j].addEventListener('submit', handleSubmit);
-    banned.push(upNext[j]);
+  if (n < clickLimit){
+    for (var i = 0; i < banned.length; i++) {
+      var axed = document.getElementById(banned[i].name);
+      axed.parentNode.removeChild(axed);
+    }
+    banned = chosen;
+    chosen = chooseThree();
+    var upNext = [];
+    console.log(chosen);
+    upNext.push(imageArray[chosen[0]]);
+    upNext.push(imageArray[chosen[1]]);
+    upNext.push(imageArray[chosen[2]]);
+    console.log(upNext);
+    banned = [];
+    for (var j = 0; j < upNext.length; j++){
+      createElement('img', 'src', upNext[j].src, '', imageHolder, 'id', upNext[j].name);
+      document.getElementById(upNext[j].name).addEventListener('click', handleClick);
+      banned.push(upNext[j]);
+      upNext[j].timesShown += 1;
+      //console.log(upNext[j].name + ' has been shown ' + upNext[j].timesShown + ' times!');
+    }
+    n++;
+  } else {
+    for (var i = 0; i < banned.length; i++) {
+      var axed = document.getElementById(banned[i].name);
+      axed.parentNode.removeChild(axed);
+    }
+    for (var x = 0; x < imageArray.length; x++){
+      dataShown.push(imageArray[x].timesShown);
+      dataPressed.push(imageArray[x].timesPressed);
+      dataPercent.push(Math.floor((imageArray[x].timesPressed / imageArray[x].timesShown) * 100));
+      dataLabels.push(imageArray[x].name);
+      console.log(imageArray[x].name + ' has been shown ' + imageArray[x].timesShown + ' times!');
+      console.log('It has been clicked ' + imageArray[x].timesPressed + ' times!');
+      console.log('That is ' + ((imageArray[x].timesPressed / imageArray[x].timesShown) * 100) + '% of the times it was shown!');
+      console.log('');
+      createElement('tr', 'class', 'tableRow', '', list, 'id', imageArray[x].name);
+      createElement('img', 'src', imageArray[x].src, '', document.getElementById(imageArray[x].name), 'class', 'finalPhoto');
+      createElement('li', 'class', 'listElement', 'Shown: ' + imageArray[x].timesShown, document.getElementById(imageArray[x].name), 'class', 'timesShownElement');
+      createElement('li', 'class', 'listElement', 'Pressed: ' + imageArray[x].timesPressed, document.getElementById(imageArray[x].name), 'class', 'timesPressedElement');
+      createElement('li', 'class', 'listElement', Math.floor((imageArray[x].timesPressed / imageArray[x].timesShown) * 100) + '%', document.getElementById(imageArray[x].name), 'class', 'percentageElement');
+    }
+    var context = document.getElementById('chart').getContext('2d');
+    var labelColors = ['blue','red','orange','purple','green','yellow','salmon','blue','red','orange','purple','green','yellow','salmon','blue','red','orange','purple','green','yellow','salmon'];
+    var chartData = {
+      type: 'bar',
+      data: {
+        labels: dataLabels,
+        datasets: [{
+          label: '# of votes',
+          data: dataPressed,
+          backgroundColor: labelColors,
+        }],
+      },
+      options: {
+        scales: {
+          yAxes: [{
+            ticks: {
+              beginAtZero: true
+            }
+          }]
+        }
+      }
+    };
+    var myChart = new Chart(context,chartData);
   }
 }
 function chooseThree(){
@@ -68,9 +122,24 @@ function chooseThree(){
       console.log('invalid number found... rerolling...');
     } else {
       chosen.push(number);
-      console.log(number);
+      //console.log(number);
     }
   }
   return chosen;
 }
+
+function handleClick(event){
+  event.preventDefault();
+  event.stopPropagation();
+  var findObj = imageArray.filter(function(e) {
+    return e.name == event.target.id;
+  });
+  //array filtering function found at http://stackoverflow.com/questions/13964155/get-javascript-object-from-array-of-objects-by-value-or-property
+  // and written by stackoverflow user Rohit
+  var object = findObj.pop();
+  object.timesPressed += 1;
+  //console.log(object.name + ' has been pressed ' + object.timesPressed + ' times!');
+  print();
+};
 print();
+console.log(imageArray);
