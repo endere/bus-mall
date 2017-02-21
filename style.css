@@ -2,22 +2,26 @@
   margin: 0px;
 }
 img{
-  height: 1000px;
-  width: 1000px;
+  height: 200px;
+  width: 200px;
   border: 1px solid;
 }
 .finalPhoto{
-  height: 300px;
-  width: 300px;
+  height: 100px;
+  width: 100px;
 }
 ul{
   display: inline;
   list-style-type: none;
 }
 li{
-  font-size: 75px;
+  font-size: 15px;
 }
 .tableRow{
   border: 1px solid;
   display: inline-block;
+}
+canvas{
+  width: 75%;
+  min-width: 400px;
 }
