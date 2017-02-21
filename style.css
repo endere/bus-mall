@@ -1,0 +1,23 @@
+*{
+  margin: 0px;
+}
+img{
+  height: 1000px;
+  width: 1000px;
+  border: 1px solid;
+}
+.finalPhoto{
+  height: 300px;
+  width: 300px;
+}
+ul{
+  display: inline;
+  list-style-type: none;
+}
+li{
+  font-size: 75px;
+}
+.tableRow{
+  border: 1px solid;
+  display: inline-block;
+}
