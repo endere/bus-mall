@@ -42,6 +42,10 @@ var banned = [];
 var chosen = [];
 var clickLimit = 25;
 var n = 0;
+var dataShown = [];
+var dataPressed = [];
+var dataPercent = [];
+var dataLabels = [];
 function print(){
   if (n < clickLimit){
     for (var i = 0; i < banned.length; i++) {
@@ -71,6 +75,10 @@ function print(){
       axed.parentNode.removeChild(axed);
     }
     for (var x = 0; x < imageArray.length; x++){
+      dataShown.push(imageArray[x].timesShown);
+      dataPressed.push(imageArray[x].timesPressed);
+      dataPercent.push(Math.floor((imageArray[x].timesPressed / imageArray[x].timesShown) * 100));
+      dataLabels.push(imageArray[x].name);
       console.log(imageArray[x].name + ' has been shown ' + imageArray[x].timesShown + ' times!');
       console.log('It has been clicked ' + imageArray[x].timesPressed + ' times!');
       console.log('That is ' + ((imageArray[x].timesPressed / imageArray[x].timesShown) * 100) + '% of the times it was shown!');
@@ -81,6 +89,29 @@ function print(){
       createElement('li', 'class', 'listElement', 'Pressed: ' + imageArray[x].timesPressed, document.getElementById(imageArray[x].name), 'class', 'timesPressedElement');
       createElement('li', 'class', 'listElement', Math.floor((imageArray[x].timesPressed / imageArray[x].timesShown) * 100) + '%', document.getElementById(imageArray[x].name), 'class', 'percentageElement');
     }
+    var context = document.getElementById('chart').getContext('2d');
+    var labelColors = ['blue','red','orange','purple','green','yellow','salmon','blue','red','orange','purple','green','yellow','salmon','blue','red','orange','purple','green','yellow','salmon'];
+    var chartData = {
+      type: 'bar',
+      data: {
+        labels: dataLabels,
+        datasets: [{
+          label: '# of votes',
+          data: dataPressed,
+          backgroundColor: labelColors,
+        }],
+      },
+      options: {
+        scales: {
+          yAxes: [{
+            ticks: {
+              beginAtZero: true
+            }
+          }]
+        }
+      }
+    };
+    var myChart = new Chart(context,chartData);
   }
 }
 function chooseThree(){
@@ -111,28 +142,4 @@ function handleClick(event){
   print();
 };
 print();
-
-var context = document.getElementById('chart').getContext('2d');
-var data = [12,4,9,3,100,55,31];
-var labelColors = ['blue','red','orange','purple','green','yellow','salmon'];
-var chartData = {
-  type: 'bar',
-  data: {
-    labels: labelColors,
-    datasets: [{
-      label: '# of votes / color',
-      data: data,
-      backgroundColor: labelColors,
-    }],
-  },
-  options: {
-    scales: {
-      yAxes: [{
-        ticks: {
-          beginAtZero: true
-        }
-      }]
-    }
-  }
-};
-var myChart = new Chart(context,chartData);
+console.log(imageArray);
