@@ -1,46 +1,76 @@
 'use strict';
-function createElement(tagType, tagIdentifier, tagIdentifiername, elementContent, sectionId){
+function createElement(tagType, tagIdentifier, tagIdentifiername, elementContent, sectionId, tagIdentifierTwo, tagIdentifiernameTwo){
   var element = document.createElement(tagType);
   element.setAttribute(tagIdentifier, tagIdentifiername);
+  element.setAttribute(tagIdentifierTwo, tagIdentifiernameTwo);
   element.textContent = elementContent;
 //  console.log(element);
   sectionId.appendChild(element);
   //this element creation function created by Benjamin Ayzenberg.
 }
-function Image(name, id, src){
+function Image(name, src){
   this.name = name;
-  this.id = id;
   this.src = src;
   this.timesShown = 0;
   this.timesPressed = 0;
 }
 var holder = document.getElementById('imageHolder');
 
-var bag = new Image('Bag', 1, 'img/bag.jpg');
-var banana = new Image('Banana', 2, 'img/banana.jpg');
-var bathroom = new Image('Bathroom', 3, 'img/bathroom.jpg');
-var boots = new Image('Boots', 4, 'img/boots.jpg');
-var breakfast = new Image('breakfast', 5, 'img/breakfast.jpg');
-var bubblegum = new Image('Bubblegum', 6, 'img/bubblegum.jpg');
-var chair = new Image('Chair', 7, 'img/chair.jpg');
-var cthulhu = new Image('Cthulhu', 8, 'img/cthulhu.jpg');
-var dogDuck = new Image('Dog-duck', 9, 'img/dog-duck.jpg');
-var dragon = new Image('Dragon', 10, 'img/dragon.jpg');
-var pen = new Image('Pen', 11, 'img/pen.jpg');
-var petSweep = new Image('Pet-sweep', 12, 'img/pet-sweep.jpg');
-var scissors = new Image('Scissors', 13, 'img/scissors.jpg');
-var shark = new Image('Shark', 14, 'img/shark.jpg');
-var sweep = new Image('Sweep', 15, 'img/sweep.png');
-var tauntaun = new Image('Tauntaun', 16, 'img/tauntaun.jpg');
-var unicorn = new Image('Unicron', 17, 'img/unicorn.jpg');
-var usb = new Image('USB', 18, 'img/usb.gif');
-var waterCan = new Image('Water-can', 19, 'img/water-can.jpg');
-var wineGlass = new Image('Wine-glass', 20, 'img/wine-glass.jpg');
-
-var imageArray = [bag,banana,bathroom,boots,breakfast,bubblegum,boots,breakfast,chair,cthulhu,dogDuck,dragon,pen,petSweep,scissors,shark,sweep,tauntaun,unicorn,usb,waterCan,wineGlass];
+var imageArray = [
+  new Image('Bag', 'img/bag.jpg'),
+  new Image('Banana', 'img/banana.jpg'),
+  new Image('Bathroom', 'img/bathroom.jpg'),
+  new Image('Boots', 'img/boots.jpg'),
+  new Image('breakfast', 'img/breakfast.jpg'),
+  new Image('Bubblegum', 'img/bubblegum.jpg'),
+  new Image('Chair', 'img/chair.jpg'),
+  new Image('Cthulhu', 'img/cthulhu.jpg'),
+  new Image('Dog-duck', 'img/dog-duck.jpg'),
+  new Image('Dragon', 'img/dragon.jpg'),
+  new Image('Pen', 'img/pen.jpg'),
+  new Image('Pet-sweep', 'img/pet-sweep.jpg'),
+  new Image('Scissors', 'img/scissors.jpg'),
+  new Image('Shark', 'img/shark.jpg'),
+  new Image('Sweep', 'img/sweep.png'),
+  new Image('Tauntaun', 'img/tauntaun.jpg'),
+  new Image('Unicron', 'img/unicorn.jpg'),
+  new Image('USB', 'img/usb.gif'),
+  new Image('Water-can', 'img/water-can.jpg'),
+  new Image('Wine-glass', 'img/wine-glass.jpg'),
+];
+var banned = [];
+var chosen = [];
 function print(){
-  for (var i = 0; i < imageArray.length; i++){
-    createElement('img', 'src', imageArray[i].src, '', imageHolder);
+  for (var i = 0; i < banned.length; i++) {
+    var axed = document.getElementById(banned[i].name);
+    axed.parentNode.removeChild(axed);
   }
+  banned = chosen;
+  chosen = chooseThree();
+  var upNext = [];
+  console.log(chosen);
+  upNext.push(imageArray[chosen[0]]);
+  upNext.push(imageArray[chosen[1]]);
+  upNext.push(imageArray[chosen[2]]);
+  console.log(upNext);
+  banned = [];
+  for (var j = 0; j < upNext.length; j++){
+    createElement('img', 'src', upNext[j].src, '', imageHolder, 'id', upNext[j].name);
+    // upNext[j].addEventListener('submit', handleSubmit);
+    banned.push(upNext[j]);
+  }
+}
+function chooseThree(){
+  chosen = [];
+  while (chosen.length < 3) {
+    var number = Math.floor(Math.random() * (imageArray.length));
+    if (chosen.includes(number) || banned.includes(number)) {
+      console.log('invalid number found... rerolling...');
+    } else {
+      chosen.push(number);
+      console.log(number);
+    }
+  }
+  return chosen;
 }
 print();
