@@ -1,4 +1,5 @@
 'use strict';
+localStorage.clear();
 function createElement(tagType, tagIdentifier, tagIdentifiername, elementContent, sectionId, tagIdentifierTwo, tagIdentifiernameTwo){
   var element = document.createElement(tagType);
   element.setAttribute(tagIdentifier, tagIdentifiername);
@@ -46,6 +47,7 @@ var dataShown = [];
 var dataPressed = [];
 var dataPercent = [];
 var dataLabels = [];
+
 function print(){
   if (n < clickLimit){
     for (var i = 0; i < banned.length; i++) {
@@ -89,29 +91,7 @@ function print(){
       createElement('li', 'class', 'listElement', 'Pressed: ' + imageArray[x].timesPressed, document.getElementById(imageArray[x].name), 'class', 'timesPressedElement');
       createElement('li', 'class', 'listElement', Math.floor((imageArray[x].timesPressed / imageArray[x].timesShown) * 100) + '%', document.getElementById(imageArray[x].name), 'class', 'percentageElement');
     }
-    var context = document.getElementById('chart').getContext('2d');
-    var labelColors = ['blue','red','orange','purple','green','yellow','salmon','blue','red','orange','purple','green','yellow','salmon','blue','red','orange','purple','green','yellow','salmon'];
-    var chartData = {
-      type: 'bar',
-      data: {
-        labels: dataLabels,
-        datasets: [{
-          label: '# of votes',
-          data: dataPressed,
-          backgroundColor: labelColors,
-        }],
-      },
-      options: {
-        scales: {
-          yAxes: [{
-            ticks: {
-              beginAtZero: true
-            }
-          }]
-        }
-      }
-    };
-    var myChart = new Chart(context,chartData);
+    saveProductsToLocalStorage(imageArray);
   }
 }
 function chooseThree(){
@@ -126,6 +106,31 @@ function chooseThree(){
     }
   }
   return chosen;
+}
+function createChart(){
+  var context = document.getElementById('chart').getContext('2d');
+  var labelColors = ['blue','red','orange','purple','green','yellow','salmon','blue','red','orange','purple','green','yellow','salmon','blue','red','orange','purple','green','yellow','salmon'];
+  var chartData = {
+    type: 'bar',
+    data: {
+      labels: dataLabels,
+      datasets: [{
+        label: '# of votes',
+        data: dataPressed,
+        backgroundColor: labelColors,
+      }],
+    },
+    options: {
+      scales: {
+        yAxes: [{
+          ticks: {
+            beginAtZero: true
+          }
+        }]
+      }
+    }
+  };
+  var myChart = new Chart(context,chartData);
 }
 
 function handleClick(event){
@@ -143,3 +148,15 @@ function handleClick(event){
 };
 print();
 console.log(imageArray);
+
+function saveProductsToLocalStorage(imageArray){
+  console.log(imageArray);
+  imageArray = JSON.stringify(imageArray);
+  console.log(imageArray);
+  localStorage.setItem('key',imageArray);
+}
+
+function returnFromStorage(){
+  imageArray = localStorage.getItem('key');
+  imageArray = JSON.parse(imageArray);
+}
