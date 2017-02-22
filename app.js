@@ -81,15 +81,15 @@ function print(){
       dataPressed.push(imageArray[x].timesPressed);
       dataPercent.push(Math.floor((imageArray[x].timesPressed / imageArray[x].timesShown) * 100));
       dataLabels.push(imageArray[x].name);
-      console.log(imageArray[x].name + ' has been shown ' + imageArray[x].timesShown + ' times!');
-      console.log('It has been clicked ' + imageArray[x].timesPressed + ' times!');
-      console.log('That is ' + ((imageArray[x].timesPressed / imageArray[x].timesShown) * 100) + '% of the times it was shown!');
-      console.log('');
-      createElement('tr', 'class', 'tableRow', '', list, 'id', imageArray[x].name);
-      createElement('img', 'src', imageArray[x].src, '', document.getElementById(imageArray[x].name), 'class', 'finalPhoto');
-      createElement('li', 'class', 'listElement', 'Shown: ' + imageArray[x].timesShown, document.getElementById(imageArray[x].name), 'class', 'timesShownElement');
-      createElement('li', 'class', 'listElement', 'Pressed: ' + imageArray[x].timesPressed, document.getElementById(imageArray[x].name), 'class', 'timesPressedElement');
-      createElement('li', 'class', 'listElement', Math.floor((imageArray[x].timesPressed / imageArray[x].timesShown) * 100) + '%', document.getElementById(imageArray[x].name), 'class', 'percentageElement');
+      // console.log(imageArray[x].name + ' has been shown ' + imageArray[x].timesShown + ' times!');
+      // console.log('It has been clicked ' + imageArray[x].timesPressed + ' times!');
+      // console.log('That is ' + ((imageArray[x].timesPressed / imageArray[x].timesShown) * 100) + '% of the times it was shown!');
+      // console.log('');
+      // createElement('tr', 'class', 'tableRow', '', list, 'id', imageArray[x].name);
+      // createElement('img', 'src', imageArray[x].src, '', document.getElementById(imageArray[x].name), 'class', 'finalPhoto');
+      // createElement('li', 'class', 'listElement', 'Shown: ' + imageArray[x].timesShown, document.getElementById(imageArray[x].name), 'class', 'timesShownElement');
+      // createElement('li', 'class', 'listElement', 'Pressed: ' + imageArray[x].timesPressed, document.getElementById(imageArray[x].name), 'class', 'timesPressedElement');
+      // createElement('li', 'class', 'listElement', Math.floor((imageArray[x].timesPressed / imageArray[x].timesShown) * 100) + '%', document.getElementById(imageArray[x].name), 'class', 'percentageElement');
     }
     saveProductsToLocalStorage(imageArray);
   }
@@ -106,31 +106,6 @@ function chooseThree(){
     }
   }
   return chosen;
-}
-function createChart(){
-  var context = document.getElementById('chart').getContext('2d');
-  var labelColors = ['blue','red','orange','purple','green','yellow','salmon','blue','red','orange','purple','green','yellow','salmon','blue','red','orange','purple','green','yellow','salmon'];
-  var chartData = {
-    type: 'bar',
-    data: {
-      labels: dataLabels,
-      datasets: [{
-        label: '# of votes',
-        data: dataPressed,
-        backgroundColor: labelColors,
-      }],
-    },
-    options: {
-      scales: {
-        yAxes: [{
-          ticks: {
-            beginAtZero: true
-          }
-        }]
-      }
-    }
-  };
-  var myChart = new Chart(context,chartData);
 }
 
 function handleClick(event){
@@ -154,9 +129,4 @@ function saveProductsToLocalStorage(imageArray){
   imageArray = JSON.stringify(imageArray);
   console.log(imageArray);
   localStorage.setItem('key',imageArray);
-}
-
-function returnFromStorage(){
-  imageArray = localStorage.getItem('key');
-  imageArray = JSON.parse(imageArray);
 }

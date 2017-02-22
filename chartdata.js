@@ -16,16 +16,16 @@ function processData(){
     dataLabels.push(imageArray[x].name);
   }
 }
-function createChart(){
-  var context = document.getElementById('chart').getContext('2d');
+function createChart(dataType,tag,title){
+  var context = document.getElementById(tag).getContext('2d');
   var labelColors = ['blue','red','orange','purple','green','yellow','salmon','blue','red','orange','purple','green','yellow','salmon','blue','red','orange','purple','green','yellow','salmon'];
   var chartData = {
     type: 'bar',
     data: {
       labels: dataLabels,
       datasets: [{
-        label: '# of votes',
-        data: dataPressed,
+        label: title,
+        data: dataType,
         backgroundColor: labelColors,
       }],
     },
@@ -49,5 +49,7 @@ function handleSubmit(event){
   event.stopPropagation();
   returnFromStorage();
   processData();
-  createChart();
+  createChart(dataShown,'shown','# times shown');
+  createChart(dataPressed,'pressed','# times pressed');
+  createChart(dataPercent,'percent', '% of times pressed');
 }
