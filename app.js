@@ -1,5 +1,4 @@
 'use strict';
-localStorage.clear();
 function createElement(tagType, tagIdentifier, tagIdentifiername, elementContent, sectionId, tagIdentifierTwo, tagIdentifiernameTwo){
   var element = document.createElement(tagType);
   element.setAttribute(tagIdentifier, tagIdentifiername);
@@ -125,8 +124,17 @@ print();
 console.log(imageArray);
 
 function saveProductsToLocalStorage(imageArray){
-  console.log(imageArray);
-  imageArray = JSON.stringify(imageArray);
-  console.log(imageArray);
-  localStorage.setItem('key',imageArray);
+  if (localStorage.getItem('key')){
+    var storage = localStorage.getItem('key');
+    storage = JSON.parse(storage);
+    for (var i = 0; i < storage.length; i++){
+      storage[i].timesShown += imageArray[i].timesShown;
+      storage[i].timesPressed += imageArray[i].timesPressed;
+    }
+    storage = JSON.stringify(storage);
+    localStorage.setItem('key',storage);
+  } else {
+    var storage = JSON.stringify(imageArray);
+    localStorage.setItem('key',storage);
+  }
 }
